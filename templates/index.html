@@ -2,31 +2,69 @@
 <html lang="pt-br">
 <head>
 	<meta charset="UTF-8">
-	<title>Baixar Música</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LuiDJ</title>
 	<link rel="stylesheet" href="/static/assets/styles.css">
 </head>
 <body>
-	<div class="container">
-		<h1>Baixar Música</h1>
-		<div class="folders">
-			<form method="post" action="{{ url_for('add_folder') }}">
-                <input type="text" name="new_folder" placeholder="Nome da pasta">
-                <button type="submit">Adicionar</button>
-            </form>
+	<header>
+		<div class="container">
+			<h1>LuiDJ</h1>
+			<nav>
+				<ul>
+					<li>
+						<button data-toggle="playlists" class="nav-button">Playlists</button>
+					</li>
+					<li>
+						<button data-toggle="download" class="nav-button active">Baixar músicas</button>
+					</li>
+				</ul>
+			</nav>
 		</div>
-		<form method="post" action="{{ url_for('add_music') }}">
-                <select placeholder="Playlist" name="folder" id="folder">
-                    {% for folder in folders %}
-                        <option value="{{ folder }}" {% if folder == selected_folder %}selected{% endif %}>{{ folder }}</option>
-                    {% endfor %}
-                </select>
-                <input type="hidden" name="folder" value="{{ selected_folder }}">
-                <input type="text" name="music_link" placeholder="Colar" required>
-                <button type="submit">Adicionar</button>
-		</form>
-		{% if msg %}
-			<div class="msg">{{ msg }}</div>
-		{% endif %}
-	</div>
+	</header>
+	<main>
+		<div class="container">
+			<div id="playlists" class="column playlists">
+				<h2>Playlists</h2>
+				<ul>
+					{% for folder in folders %}
+						<li>{{ folder }}</option>
+					{% endfor %}
+				</ul>
+				<form method="post" action="{{ url_for('add_folder') }}">
+					<legend>Para adicionar uma nova playlist, adicione o nome da playlist no campo abaixo.</legend>
+					<div>
+						<input type="text" name="new_folder" placeholder="Nome da playlist">
+						<button type="submit">Adicionar playlist</button>
+					</div>
+				</form>
+			</div>
+			<div id="download" class="column download active">
+				<h2>Baixar músicas</h2>
+				<form method="post" action="{{ url_for('add_music') }}">
+					<fieldset>
+						<legend>Adicionar em:</legend>
+						{% for folder in folders %}
+							<label class="field-label">
+								<span>{{ folder }}</span>
+								<input type="radio" name="folder" id="" value="{{ folder }}" {% if folder == selected_folder %}checked{% endif %}>
+							</label>
+						{% endfor %}
+					</fieldset>
+					<div>
+						<input type="text" name="music_link" placeholder="Cole o link da música ou do álbum aqui" required>
+						<button type="submit">Baixar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+	{% if msg %}
+		<div class="message active">
+			<p>{{ msg }}</p>
+			<button class="btn-close">x</button>
+		</div>
+	{% endif %}
+	<script src="/static/assets/script.js"></script>
 </body>
 </html>

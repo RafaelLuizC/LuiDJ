@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 folders = listar_pastas_musicas()
 if not folders:
-    criar_pasta("Favoritas")
+    criar_pasta("Minhas músicas",".")
 playlist = {folder: [] for folder in folders}
 
 @app.route("/", methods=["GET"])
@@ -18,7 +18,7 @@ def add_folder():
     selected_folder = request.form.get("folder", folders[0])
     msg = None
     if new_folder and new_folder not in folders:
-        new_folder_path = criar_pasta(new_folder)
+        new_folder_path = criar_pasta(new_folder,".")
         folders.append(new_folder)
         playlist[new_folder] = []
         msg = f"Pasta '{new_folder}' adicionada!"
@@ -30,6 +30,7 @@ def add_music():
     folder = request.form.get("folder", folders[0])
     msg = None
     if link:
+        print (folder)
         playlist.setdefault(folder, []).append(link)
         baixar_youtube(link, folder)
         msg = f"Música adicionada à pasta '{folder}'!"
