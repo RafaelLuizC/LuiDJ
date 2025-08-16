@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>Baixar Música</title>
+	<link rel="stylesheet" href="/static/assets/styles.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Baixar Música</h1>
+		<div class="folders">
+			<form method="post" action="{{ url_for('add_folder') }}">
+                <input type="text" name="new_folder" placeholder="Nome da pasta">
+                <button type="submit">Adicionar</button>
+            </form>
+		</div>
+		<form method="post" action="{{ url_for('add_music') }}">
+                <select placeholder="Playlist" name="folder" id="folder">
+                    {% for folder in folders %}
+                        <option value="{{ folder }}" {% if folder == selected_folder %}selected{% endif %}>{{ folder }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="folder" value="{{ selected_folder }}">
+                <input type="text" name="music_link" placeholder="Colar" required>
+                <button type="submit">Adicionar</button>
+		</form>
+		{% if msg %}
+			<div class="msg">{{ msg }}</div>
+		{% endif %}
+	</div>
+</body>
+</html>
